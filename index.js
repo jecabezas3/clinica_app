@@ -5,17 +5,21 @@ const dotenv = require("dotenv");
 const db = require("./config/database.js");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
+dotenv.config();
+
+const app = express();
+
+// Configuración de la base de datos
+const sessionStore = new SequelizeStore({
+    db: db
+});
+
 // Importar rutas
 const UserRoute = require("./routes/UserRoute.js");
-
 const PacienteRoute = require("./routes/PacienteRoute.js");
 const AuthRoute = require("./routes/AuthRoute.js");
 const HistoriaClinicaRoute = require("./routes/HistoriaClinicaRoute.js");
 const PaisRoute = require("./routes/PaisRoute.js");
-
-dotenv.config();
-
-const app = express();
 
 (async () => {
     try {
@@ -26,19 +30,13 @@ const app = express();
     }
 })();
 
-
-// Configuración de la base de datos
-const sessionStore = new SequelizeStore({
-    db: db
-});
-
 app.use(session({
     secret: process.env.SECRET_SESSION,
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
-        secure: 'auto'
+        secure: process.env.NODE_ENV === 'production' // Ajusta según tu entorno
     }
 }));
 
@@ -51,16 +49,19 @@ app.use(express.json());
 
 // Usar las rutas
 app.use(UserRoute);
-// Agregar otras rutas aquí
 app.use(PacienteRoute);
 app.use(AuthRoute);
 app.use(HistoriaClinicaRoute);
 app.use(PaisRoute);
-store.sync();
 
 // Manejo de errores
 app.use((req, res, next) => {
     res.status(404).send('Not Found');
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 app.listen(process.env.PORT, () => {
