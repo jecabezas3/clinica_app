@@ -8,10 +8,10 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 // Importar rutas
 const UserRoute = require("./routes/UserRoute.js");
 
-// const PacienteRoute = require("./routes/PacienteRoute.js");
-// const AuthRoute = require("./routes/AuthRoute.js");
-// const HistoriaClinicaRoute = require("./routes/HistoriaClinicaRoute.js");
-// const PaisRoute = require("./routes/PaisRoute.js");
+const PacienteRoute = require("./routes/PacienteRoute.js");
+const AuthRoute = require("./routes/AuthRoute.js");
+const HistoriaClinicaRoute = require("./routes/HistoriaClinicaRoute.js");
+const PaisRoute = require("./routes/PaisRoute.js");
 
 dotenv.config();
 
@@ -48,10 +48,10 @@ app.use(express.json());
 // Usar las rutas
 app.use(UserRoute);
 // Agregar otras rutas aquí
-// app.use('/pacientes', PacienteRoute);
-// app.use('/auth', AuthRoute);
-// app.use('/historias', HistoriaClinicaRoute);
-// app.use('/paises', PaisRoute);
+app.use(PacienteRoute);
+app.use(AuthRoute);
+app.use(HistoriaClinicaRoute);
+app.use(PaisRoute);
 
 // Manejo de errores
 app.use((req, res, next) => {
