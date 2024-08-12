@@ -42,7 +42,11 @@ app.use(session({
     }
 }));
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://madresegura.co',
+    credentials: true 
+}));
+
 app.use(express.json());
 
 // Usar las rutas
