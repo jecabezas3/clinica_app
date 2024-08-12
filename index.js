@@ -9,9 +9,9 @@ dotenv.config();
 
 const app = express();
 
-// Configuración de la base de datos
 const sessionStore = new SequelizeStore({
-    db: db
+    db: db,
+    table: 'sessions' // Configura el nombre de la tabla aquí
 });
 
 // Importar rutas
