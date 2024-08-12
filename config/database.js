@@ -1,8 +1,8 @@
 const { Sequelize } = require("sequelize");
 
-const db = new Sequelize('freedb_clinica_app', 'freedb_clinica_app_user', '9$ZkyDn8X*u@Hb%', {
-    host: "sql.freedb.tech",
-    dialect: "mysql"
+const db = new Sequelize('madreseg_clinica_app', 'madreseg_clinica_app_user', 'holamundo123.', {
+  host: "190.90.160.166",
+  dialect: "mysql"
 });
 
 // Probar la conexión
