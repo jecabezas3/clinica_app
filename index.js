@@ -17,14 +17,14 @@ dotenv.config();
 
 const app = express();
 
-(async () => {
-    try {
-        await db.sync();
-        console.log("All models were synchronized successfully.");
-    } catch (error) {
-        console.error("Error synchronizing the models:", error);
-    }
-})();
+// (async () => {
+//     try {
+//         await db.sync();
+//         console.log("All models were synchronized successfully.");
+//     } catch (error) {
+//         console.error("Error synchronizing the models:", error);
+//     }
+// })();
 
 
 // Configuración de la base de datos
