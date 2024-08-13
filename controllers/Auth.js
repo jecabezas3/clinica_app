@@ -26,6 +26,7 @@ exports.Login = async (req, res) => {
 
 exports.Me = async (req, res) => {
     try {
+        console.log("Session on /me:", req.session);
         if (!req.session.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
         }
