@@ -40,10 +40,7 @@ app.use(session({
     }
 }));
 
-app.use(cors({
-    origin: 'https://madresegura.co',
-    credentials: true 
-}));
+app.use(cors({ origin: '*' }));
 
 app.use(express.json());
 
