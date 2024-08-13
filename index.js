@@ -37,7 +37,7 @@ app.use(session({
 
 
 app.use(cors({
-    origin: 'https://madresegura.co',
+    origin: 'https://madresegura.co:442',
     credentials: true 
 }));
 
