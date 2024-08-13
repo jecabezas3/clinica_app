@@ -9,28 +9,21 @@ dotenv.config();
 
 const app = express();
 
+// Configuración del almacenamiento de sesiones
 const sessionStore = new SequelizeStore({
     db: db,
-    table: 'sessions'
+    tableName: 'sessions' // Configura el nombre de la tabla si lo deseas
 });
-
 
 (async () => {
     try {
         await db.sync();
+        await sessionStore.sync(); // Asegúrate de sincronizar el almacenamiento de sesiones
         console.log("All models were synchronized successfully.");
     } catch (error) {
         console.error("Error synchronizing the models:", error);
     }
 })();
-
-
-// Sincronizar la tienda de sesiones
-sessionStore.sync().then(() => {
-    console.log("Session store synced successfully.");
-}).catch(error => {
-    console.error("Error syncing session store:", error);
-});
 
 app.use(session({
     secret: process.env.SECRET_SESSION,
@@ -38,17 +31,9 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
-        secure: process.env.NODE_ENV === 'production'
+        secure: process.env.NODE_ENV === 'production' // Asegúrate de que la cookie esté configurada correctamente
     }
 }));
-
-// Importar rutas
-const UserRoute = require("./routes/UserRoute.js");
-const PacienteRoute = require("./routes/PacienteRoute.js");
-const AuthRoute = require("./routes/AuthRoute.js");
-const HistoriaClinicaRoute = require("./routes/HistoriaClinicaRoute.js");
-const PaisRoute = require("./routes/PaisRoute.js");
-
 
 app.use(cors({
     origin: 'https://madresegura.co',
@@ -58,20 +43,15 @@ app.use(cors({
 app.use(express.json());
 
 // Usar las rutas
-app.use(UserRoute);
-app.use(PacienteRoute);
-app.use(AuthRoute);
-app.use(HistoriaClinicaRoute);
-app.use(PaisRoute);
+app.use(require("./routes/UserRoute.js"));
+app.use(require("./routes/PacienteRoute.js"));
+app.use(require("./routes/AuthRoute.js"));
+app.use(require("./routes/HistoriaClinicaRoute.js"));
+app.use(require("./routes/PaisRoute.js"));
 
 // Manejo de errores
 app.use((req, res, next) => {
     res.status(404).send('Not Found');
-});
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
 });
 
 app.listen(process.env.PORT, () => {
