@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 
-const db = new Sequelize('freedb_clinica_app', 'freedb_clinica_app_user', '9$ZkyDn8X*u@Hb%.', {
+const db = new Sequelize('freedb_clinica_app', 'freedb_clinica_app_user', '9$ZkyDn8X*u@Hb%', {
   host: "sql.freedb.tech",
   dialect: "mysql"
 });
