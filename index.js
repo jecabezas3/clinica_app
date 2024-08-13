@@ -28,16 +28,18 @@ const sessionStore = new SequelizeStore({
 app.use(session({
     secret: process.env.SECRET_SESSION,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: sessionStore,
     cookie: {
-        secure: 'auto' // Se asegura automáticamente si se usa HTTPS
+        secure: process.env.NODE_ENV === 'production', // Cookies seguras solo en producción
+        httpOnly: true, // No accesible desde el frontend
+        sameSite: 'None' // Necesario para cookies cross-site
     }
 }));
 
 
 app.use(cors({
-    origin: 'https://madresegura.co:442',
+    origin: 'https://madresegura.co',
     credentials: true 
 }));
 
