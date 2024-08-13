@@ -31,9 +31,10 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
-        secure: process.env.NODE_ENV === 'production' // Asegúrate de que la cookie esté configurada correctamente
+        secure: 'auto' // Se asegura automáticamente si se usa HTTPS
     }
 }));
+
 
 app.use(cors({
     origin: 'https://madresegura.co',
