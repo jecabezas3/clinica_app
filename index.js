@@ -11,15 +11,9 @@ const app = express();
 
 const sessionStore = new SequelizeStore({
     db: db,
-    table: 'sessions' // Configura el nombre de la tabla aquí
+    table: 'sessions'
 });
 
-// Importar rutas
-const UserRoute = require("./routes/UserRoute.js");
-const PacienteRoute = require("./routes/PacienteRoute.js");
-const AuthRoute = require("./routes/AuthRoute.js");
-const HistoriaClinicaRoute = require("./routes/HistoriaClinicaRoute.js");
-const PaisRoute = require("./routes/PaisRoute.js");
 
 (async () => {
     try {
@@ -29,6 +23,14 @@ const PaisRoute = require("./routes/PaisRoute.js");
         console.error("Error synchronizing the models:", error);
     }
 })();
+
+
+// Sincronizar la tienda de sesiones
+sessionStore.sync().then(() => {
+    console.log("Session store synced successfully.");
+}).catch(error => {
+    console.error("Error syncing session store:", error);
+});
 
 app.use(session({
     secret: process.env.SECRET_SESSION,
@@ -40,7 +42,18 @@ app.use(session({
     }
 }));
 
-app.use(cors({ origin: '*' }));
+// Importar rutas
+const UserRoute = require("./routes/UserRoute.js");
+const PacienteRoute = require("./routes/PacienteRoute.js");
+const AuthRoute = require("./routes/AuthRoute.js");
+const HistoriaClinicaRoute = require("./routes/HistoriaClinicaRoute.js");
+const PaisRoute = require("./routes/PaisRoute.js");
+
+
+app.use(cors({
+    origin: 'https://madresegura.co',
+    credentials: true 
+}));
 
 app.use(express.json());
 
