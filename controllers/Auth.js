@@ -14,6 +14,8 @@ exports.Login = async (req, res) => {
         if (!match) return res.status(400).json({ msg: "Contraseña incorrecta" });
 
         req.session.userId = user.uuid;
+        console.log("Session after setting userId:", req.session); // Agrega este log
+
         const uuid = user.uuid;
         const name = user.name;
         const email = user.email;
@@ -23,6 +25,7 @@ exports.Login = async (req, res) => {
         res.status(500).json({ msg: "Error en el servidor" });
     }
 }
+
 
 exports.Me = async (req, res) => {
     try {
