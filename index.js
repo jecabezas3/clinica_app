@@ -32,6 +32,8 @@ app.use(session({
     store: sessionStore,
     cookie: {
         secure: process.env.NODE_ENV === 'production', // Cookies seguras solo en producción
+        httpOnly: false, // No accesible desde el frontend
+        sameSite: 'None', // Necesario para cookies cross-site
         maxAge: 24 * 60 * 60 * 1000 // 1 día de duración para la cookie
     }
 }));
