@@ -31,9 +31,9 @@ app.use(session({
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-        secure: true, // Cookies seguras solo en producción
+        secure: false, // Cookies seguras solo en producción
         httpOnly: false, // No accesible desde el frontend
-        sameSite: 'Lax', // Necesario para cookies cross-site
+        sameSite: 'None', // Necesario para cookies cross-site
         maxAge: 24 * 60 * 60 * 1000 // 1 día de duración para la cookie
     }
 }));
