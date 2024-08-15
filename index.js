@@ -40,7 +40,7 @@ app.use(session({
 
 
 app.use(cors({
-    origin: 'https://madresegura.co',
+    origin: 'https://frontendclinica.madresegura.co',
     credentials: true 
 }));
 
