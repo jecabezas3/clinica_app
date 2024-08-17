@@ -33,7 +33,7 @@ app.use(session({
     cookie: {
         secure: false, // Cookies seguras solo en producción
         httpOnly: false, // No accesible desde el frontend
-        sameSite: 'None', // Necesario para cookies cross-site
+        sameSite: 'lax', // Necesario para cookies cross-site
         maxAge: 24 * 60 * 60 * 1000 // 1 día de duración para la cookie
     }
 }));
