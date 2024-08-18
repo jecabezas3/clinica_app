@@ -31,12 +31,6 @@ app.use(session({
     resave: false, // Solo guarda la sesión si ha habido cambios
     saveUninitialized: false, // No guarda sesiones no inicializadas
     store: sessionStore,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production', // Asegúrate de que sea true en producción
-        httpOnly: false, 
-        sameSite: 'lax', 
-        maxAge: 24 * 60 * 60 * 1000 // 24 horas
-    }
 }));
 
 app.use(cors({
