@@ -47,11 +47,11 @@ app.use(cors({
 app.use(express.json());
 
 // Usar las rutas
-app.use('/api/users', require("./routes/UserRoute.js"));
-app.use('/api/pacientes', require("./routes/PacienteRoute.js"));
-app.use('/api/auth', require("./routes/AuthRoute.js"));
-app.use('/api/historias', require("./routes/HistoriaClinicaRoute.js"));
-app.use('/api/paises', require("./routes/PaisRoute.js"));
+app.use(require("./routes/UserRoute.js"));
+app.use(require("./routes/PacienteRoute.js"));
+app.use(require("./routes/AuthRoute.js"));
+app.use(require("./routes/HistoriaClinicaRoute.js"));
+app.use(require("./routes/PaisRoute.js"));
 
 // Manejo de errores
 app.use((req, res, next) => {
