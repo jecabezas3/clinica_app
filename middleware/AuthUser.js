@@ -6,6 +6,7 @@ const { globalSession } = require('../controllers/Auth'); // Asegúrate de ajust
 
 exports.verifyUser = async (req, res, next) => {
     try {
+        console.log(globalSession);
         // Verifica si la sesión global está definida
         if (!globalSession || !globalSession.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
