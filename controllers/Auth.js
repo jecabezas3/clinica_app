@@ -1,7 +1,7 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 
-let initialSessionID = null; // Variable global para almacenar el sid del login
+let savedSessionID = null;
 
 exports.Login = async (req, res) => {
     try {
@@ -17,18 +17,19 @@ exports.Login = async (req, res) => {
         if (!match) return res.status(400).json({ msg: "Contraseña incorrecta" });
 
         req.session.userId = user.uuid;
-        console.log("Session after setting userId:", req.session);
-        console.log("SessionID after login:", req.sessionID);
+        savedSessionID = req.sessionID;  // Guardar el SID en la variable
 
-        // Guardar el `sid` en la variable global
-        initialSessionID = req.sessionID;
-
-        // Guardar sesión en el store
         req.session.save(err => {
             if (err) {
                 return res.status(500).json({ msg: 'Error al guardar la sesión' });
             }
-            res.json({ msg: 'Inicio de sesión exitoso', uuid: user.uuid, name: user.name, email: user.email, role: user.role });
+            res.status(200).json({
+                msg: 'Inicio de sesión exitoso',
+                uuid: user.uuid,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            });
         });
     } catch (error) {
         res.status(500).json({ msg: "Error en el servidor" });

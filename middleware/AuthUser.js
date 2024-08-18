@@ -6,17 +6,25 @@ exports.verifyUser = async (req, res, next) => {
     console.log('Session ID (sid) at verifyUser:', req.sessionID);
     console.log('Session at verifyUser:', req.session);
 
-    // Verifica si el `sid` de la sesión actual coincide con el guardado
-    if (!req.session.userId || req.sessionID !== initialSessionID) {
+    // Usar el `sid` guardado durante el login
+    const sessionIDToCheck = savedSessionID;
+
+    if (!sessionIDToCheck) {
         return res.status(401).json({ msg: "Primero inicia sesión" });
     }
 
     try {
-        const sessionData = await sessionStore.get(req.sessionID);
+        // Consultar la base de datos usando el `sid` almacenado
+        const sessionData = await sessionStore.get(sessionIDToCheck);
         console.log('Session Data from Store:', sessionData);
 
         if (!sessionData) {
             return res.status(401).json({ msg: "Sesión no válida o expirada" });
+        }
+
+        // Verificar si el `userId` está presente en la sesión
+        if (sessionData.userId !== req.session.userId) {
+            return res.status(401).json({ msg: "Sesión no válida" });
         }
 
         const user = await User.findOne({
