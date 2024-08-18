@@ -18,7 +18,7 @@ const sessionStore = new SequelizeStore({
 (async () => {
     try {
         await db.sync();
-        await sessionStore.sync(); // Asegúrate de sincronizar el almacenamiento de sesiones
+        //await sessionStore.sync(); // Sincroniza el almacenamiento de sesiones
         console.log("All models were synchronized successfully.");
     } catch (error) {
         console.error("Error synchronizing the models:", error);
