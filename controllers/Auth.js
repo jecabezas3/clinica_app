@@ -16,6 +16,8 @@ exports.Login = async (req, res) => {
 
         req.session.userId = user.uuid;
         console.log("Session after setting userId:", req.session);
+        console.log("SessionID after login:", req.sessionID);
+
 
         const uuid = user.uuid;
         const name = user.name;
