@@ -1,5 +1,5 @@
 const User = require("../models/UserModel");
-const sessionStore = require("../config/sessionStore"); // Asegúrate de importar tu sessionStore
+const sessionStore = require("../index");
 
 exports.verifyUser = async (req, res, next) => {
     console.log('Session at verifyUser:', req.session); // Muestra toda la sesión
