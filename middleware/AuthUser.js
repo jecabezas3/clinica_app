@@ -1,7 +1,4 @@
 const User = require("../models/UserModel");
-const sessionStore = require("../index");
-
-const User = require("../models/UserModel");
 const sessionStore = require("../index"); // Asegúrate de que esto esté correctamente configurado
 
 exports.verifyUser = async (req, res, next) => {

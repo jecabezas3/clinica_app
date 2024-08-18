@@ -18,6 +18,8 @@ exports.Login = async (req, res) => {
         console.log("Session after setting userId:", req.session);
         console.log("SessionID after login:", req.sessionID);
 
+        console.log("Sesion del cookie express:", req.cookie);
+
         req.session.save(err => {
             if (err) {
                 return res.status(500).json({ msg: 'Error al guardar la sesión' });
