@@ -2,7 +2,7 @@ const User = require("../models/UserModel");
 
 exports.verifyUser = async (req, res, next) => {
     try {
-        console.log("Sesion cuando se hace verifyUser:",req.session.userId);
+        console.log("Sesion cuando se hace verifyUser:",req.session);
         // Verifica si la sesión está definida
         if (!req.session.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
