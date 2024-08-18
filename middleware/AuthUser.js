@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 
 exports.verifyUser = async (req, res, next) => {
+    console.log('Session at verifyUser:', req.session);
     if (!req.session.userId) {
         return res.status(401).json({ msg: "Primero inicia sesión" });
     }
@@ -18,6 +19,7 @@ exports.verifyUser = async (req, res, next) => {
         res.status(500).json({ msg: error.message });
     }
 }
+
 
 exports.adminOnly = async (req, res, next) => {
     try {
