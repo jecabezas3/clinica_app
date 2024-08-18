@@ -36,11 +36,12 @@ exports.Login = async (req, res) => {
 
 exports.Me = async (req, res) => {
     try {
-        console.log("Session on /me:", req.session);
+        // Verifica si la sesión está definida
         if (!req.session.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
         }
 
+        // Busca al usuario usando el userId de la sesión
         const user = await User.findOne({
             attributes: ['uuid', 'name', 'email', 'role'],
             where: {
@@ -56,10 +57,9 @@ exports.Me = async (req, res) => {
     }
 };
 
-
 exports.logOut = (req, res) => {
-    req.session.destroy((err) => {
+    req.session.destroy(err => {
         if (err) return res.status(400).json({ msg: "No se puede cerrar la sesión" });
         res.status(200).json({ msg: "Se ha desconectado con éxito" });
     });
-}
+};
