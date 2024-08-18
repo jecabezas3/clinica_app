@@ -22,7 +22,7 @@ exports.Login = async (req, res) => {
             userId: user.uuid,
             sessionId: req.sessionID
         };
-
+        console.log(globalSession);
         req.session.userId = user.uuid;
 
         req.session.save(err => {
@@ -45,6 +45,7 @@ exports.Login = async (req, res) => {
 
 exports.Me = async (req, res) => {
     try {
+        console.log(globalSession);
         // Verifica si existe la sesión global
         if (!globalSession || !globalSession.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
