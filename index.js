@@ -17,30 +17,27 @@ const sessionStore = new SequelizeStore({
 
 (async () => {
     try {
-        await db.sync();
-        //await sessionStore.sync(); // Sincroniza el almacenamiento de sesiones
-        console.log("All models were synchronized successfully.");
+        await db.sync(); // Sincroniza los modelos con la base de datos
+        await sessionStore.sync(); // Sincroniza la tabla de sesiones
+        console.log("All models and session store were synchronized successfully.");
     } catch (error) {
-        console.error("Error synchronizing the models:", error);
+        console.error("Error synchronizing the models or session store:", error);
     }
 })();
 
-console.log("Environment:", process.env.NODE_ENV);
-
+// Configuración del middleware
 app.use(session({
     secret: process.env.SECRET_SESSION,
     resave: false, // Solo guarda la sesión si ha habido cambios
     saveUninitialized: false, // No guarda sesiones no inicializadas
     store: sessionStore,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', 
+        secure: process.env.NODE_ENV === 'production', // Asegúrate de que sea true en producción
         httpOnly: false, 
         sameSite: 'lax', 
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 24 * 60 * 60 * 1000 // 24 horas
     }
 }));
-
-sessionStore.sync();
 
 app.use(cors({
     origin: 'https://frontendclinica.madresegura.co',
@@ -50,17 +47,18 @@ app.use(cors({
 app.use(express.json());
 
 // Usar las rutas
-app.use(require("./routes/UserRoute.js"));
-app.use(require("./routes/PacienteRoute.js"));
-app.use(require("./routes/AuthRoute.js"));
-app.use(require("./routes/HistoriaClinicaRoute.js"));
-app.use(require("./routes/PaisRoute.js"));
+app.use('/api/users', require("./routes/UserRoute.js"));
+app.use('/api/pacientes', require("./routes/PacienteRoute.js"));
+app.use('/api/auth', require("./routes/AuthRoute.js"));
+app.use('/api/historias', require("./routes/HistoriaClinicaRoute.js"));
+app.use('/api/paises', require("./routes/PaisRoute.js"));
 
 // Manejo de errores
 app.use((req, res, next) => {
     res.status(404).send('Not Found');
 });
 
+// Inicio del servidor
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
 });
