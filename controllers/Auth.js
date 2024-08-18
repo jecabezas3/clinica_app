@@ -1,9 +1,6 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 
-// Variable global para almacenar la sesión y el userId
-let globalSession = null;
-
 exports.Login = async (req, res) => {
     try {
         const user = await User.findOne({
@@ -17,12 +14,7 @@ exports.Login = async (req, res) => {
         const match = await bcrypt.compare(req.body.password, user.password);
         if (!match) return res.status(400).json({ msg: "Contraseña incorrecta" });
 
-        // Guarda el userId en la sesión global
-        globalSession = {
-            userId: user.uuid,
-            sessionId: req.sessionID
-        };
-        console.log(globalSession);
+        // Guarda el userId en la sesión
         req.session.userId = user.uuid;
 
         req.session.save(err => {
@@ -42,20 +34,17 @@ exports.Login = async (req, res) => {
     }
 };
 
-
 exports.Me = async (req, res) => {
     try {
-        console.log(globalSession);
-        // Verifica si existe la sesión global
-        if (!globalSession || !globalSession.userId) {
+        console.log("Session on /me:", req.session);
+        if (!req.session.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
         }
 
-        // Busca al usuario usando el userId de la sesión global
         const user = await User.findOne({
             attributes: ['uuid', 'name', 'email', 'role'],
             where: {
-                uuid: globalSession.userId
+                uuid: req.session.userId
             }
         });
 
@@ -66,6 +55,7 @@ exports.Me = async (req, res) => {
         res.status(500).json({ msg: "Error en el servidor" });
     }
 };
+
 
 exports.logOut = (req, res) => {
     req.session.destroy((err) => {
