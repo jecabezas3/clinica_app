@@ -1,4 +1,7 @@
 const User = require("../models/UserModel");
+const sessionStore = require("../index");
+
+const User = require("../models/UserModel");
 const sessionStore = require("../index"); // Asegúrate de que esto esté correctamente configurado
 
 exports.verifyUser = async (req, res, next) => {
@@ -6,27 +9,21 @@ exports.verifyUser = async (req, res, next) => {
     console.log('Session ID (sid) at verifyUser:', req.sessionID);
     console.log('Session at verifyUser:', req.session);
 
-    // Usar el `sid` guardado durante el login
-    const sessionIDToCheck = savedSessionID;
-
-    if (!sessionIDToCheck) {
+    // Verificar si `userId` está presente en la sesión
+    if (!req.session.userId) {
         return res.status(401).json({ msg: "Primero inicia sesión" });
     }
 
     try {
-        // Consultar la base de datos usando el `sid` almacenado
-        const sessionData = await sessionStore.get(sessionIDToCheck);
+        // Obtener los datos de la sesión desde el store
+        const sessionData = await sessionStore.get(req.sessionID);
         console.log('Session Data from Store:', sessionData);
 
         if (!sessionData) {
             return res.status(401).json({ msg: "Sesión no válida o expirada" });
         }
 
-        // Verificar si el `userId` está presente en la sesión
-        if (sessionData.userId !== req.session.userId) {
-            return res.status(401).json({ msg: "Sesión no válida" });
-        }
-
+        // Obtener el usuario basado en `userId` almacenado en la sesión
         const user = await User.findOne({
             where: {
                 uuid: req.session.userId
@@ -37,10 +34,12 @@ exports.verifyUser = async (req, res, next) => {
             return res.status(404).json({ msg: "No existe ese usuario" });
         }
 
+        // Almacenar información del usuario en el objeto `req`
         req.userId = user.id;
         req.role = user.role;
         next();
     } catch (error) {
+        console.error('Error en verifyUser middleware:', error.message);
         res.status(500).json({ msg: error.message });
     }
 };
