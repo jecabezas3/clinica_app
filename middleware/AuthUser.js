@@ -2,14 +2,23 @@ const User = require("../models/UserModel");
 const sessionStore = require("../index");
 
 exports.verifyUser = async (req, res, next) => {
-    console.log('Session at verifyUser:', req.session);
+    console.log('Entering verifyUser middleware');
     console.log('Session ID (sid) at verifyUser:', req.sessionID);
+    console.log('Session at verifyUser:', req.session);
 
     if (!req.session.userId) {
         return res.status(401).json({ msg: "Primero inicia sesión" });
     }
 
     try {
+        // Verifica los datos de la sesión
+        const sessionData = await sessionStore.get(req.sessionID);
+        console.log('Session Data from Store:', sessionData);
+
+        if (!sessionData) {
+            return res.status(401).json({ msg: "Sesión no válida o expirada" });
+        }
+
         const user = await User.findOne({
             where: {
                 uuid: req.session.userId
