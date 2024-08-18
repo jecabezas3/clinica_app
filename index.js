@@ -24,16 +24,18 @@ const sessionStore = new SequelizeStore({
         console.error("Error synchronizing the models:", error);
     }
 })();
+
 console.log("Environment:", process.env.NODE_ENV);
+
 app.use(session({
     secret: process.env.SECRET_SESSION,
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-        secure: false, // Cookies seguras solo en producción
+        secure: process.env.NODE_ENV === 'production', // Cookies seguras solo en producción
         httpOnly: false, // No accesible desde el frontend
-        sameSite: 'strict', // Necesario para cookies cross-site
+        sameSite: process.env.NODE_ENV === 'production', // Necesario para cookies cross-site
         maxAge: 24 * 60 * 60 * 1000 // 1 día de duración para la cookie
     }
 }));
