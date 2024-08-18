@@ -18,16 +18,27 @@ exports.Login = async (req, res) => {
         console.log("Session after setting userId:", req.session);
         console.log("SessionID after login:", req.sessionID);
 
+        req.session.save(err => {
+            if (err) {
+                return res.status(500).json({ msg: 'Error al guardar la sesión' });
+            }
 
-        const uuid = user.uuid;
-        const name = user.name;
-        const email = user.email;
-        const role = user.role;
-        res.status(200).json({ uuid, name, email, role });
+            // Enviar información del usuario y SID en la respuesta
+            res.status(200).json({
+                msg: 'Inicio de sesión exitoso',
+                sid: req.sessionID, // Enviar el SID al cliente
+                user: {
+                    uuid: user.uuid,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                }
+            });
+        });
     } catch (error) {
         res.status(500).json({ msg: "Error en el servidor" });
     }
-}
+};
 
 
 
@@ -37,6 +48,7 @@ exports.Me = async (req, res) => {
         if (!req.session.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
         }
+
         const user = await User.findOne({
             attributes: ['uuid', 'name', 'email', 'role'],
             where: {
@@ -48,7 +60,8 @@ exports.Me = async (req, res) => {
     } catch (error) {
         res.status(500).json({ msg: "Error en el servidor" });
     }
-}
+};
+
 
 exports.logOut = (req, res) => {
     req.session.destroy((err) => {

@@ -29,6 +29,8 @@ console.log("Environment:", process.env.NODE_ENV);
 
 app.use(session({
     secret: process.env.SECRET_SESSION,
+    resave: false, // Solo guarda la sesión si ha habido cambios
+    saveUninitialized: false, // No guarda sesiones no inicializadas
     store: sessionStore,
     cookie: {
         secure: process.env.NODE_ENV === 'production', 
