@@ -2,7 +2,7 @@ const User = require("../models/UserModel");
 const sessionStore = require("../index");
 
 // Importa la variable global desde el archivo donde está definida
-const { globalSession } = require('../controllers/YourControllerFile'); // Asegúrate de ajustar el nombre de archivo
+const { globalSession } = require('../controllers/Auth'); // Asegúrate de ajustar el nombre de archivo
 
 exports.verifyUser = async (req, res, next) => {
     try {
