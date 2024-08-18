@@ -1,6 +1,8 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 
+let initialSessionID = null; // Variable global para almacenar el sid del login
+
 exports.Login = async (req, res) => {
     try {
         const user = await User.findOne({
@@ -18,24 +20,15 @@ exports.Login = async (req, res) => {
         console.log("Session after setting userId:", req.session);
         console.log("SessionID after login:", req.sessionID);
 
-        console.log("Sesion del cookie express:", req.cookie);
+        // Guardar el `sid` en la variable global
+        initialSessionID = req.sessionID;
 
+        // Guardar sesión en el store
         req.session.save(err => {
             if (err) {
                 return res.status(500).json({ msg: 'Error al guardar la sesión' });
             }
-
-            // Enviar información del usuario y SID en la respuesta
-            res.status(200).json({
-                msg: 'Inicio de sesión exitoso',
-                sid: req.sessionID, // Enviar el SID al cliente
-                user: {
-                    uuid: user.uuid,
-                    name: user.name,
-                    email: user.email,
-                    role: user.role
-                }
-            });
+            res.json({ msg: 'Inicio de sesión exitoso', uuid: user.uuid, name: user.name, email: user.email, role: user.role });
         });
     } catch (error) {
         res.status(500).json({ msg: "Error en el servidor" });
