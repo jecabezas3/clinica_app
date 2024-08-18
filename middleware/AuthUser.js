@@ -11,7 +11,6 @@ exports.verifyUser = async (req, res, next) => {
     }
 
     try {
-        // Verifica los datos de la sesión
         const sessionData = await sessionStore.get(req.sessionID);
         console.log('Session Data from Store:', sessionData);
 
