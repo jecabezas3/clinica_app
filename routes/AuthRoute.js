@@ -4,7 +4,7 @@ const { verifyUser} = require('../middleware/AuthUser');
 
 const router = express.Router();
 
-router.get('/me', Me);
+router.get('/me', verifyUser,Me);
 router.post('/login', Login);
 router.delete('/logout', logOut);
 
