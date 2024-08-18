@@ -16,7 +16,7 @@ exports.Login = async (req, res) => {
 
         // Guarda el userId en la sesión
         req.session.userId = user.uuid;
-        console.log("Sesion cuando se hace login:",req.session.userId);
+        console.log("Sesion cuando se hace login:",req.session);
         req.session.save(err => {
             if (err) {
                 return res.status(500).json({ msg: 'Error al guardar la sesión' });
@@ -36,7 +36,7 @@ exports.Login = async (req, res) => {
 
 exports.Me = async (req, res) => {
     try {
-        console.log("Sesion cuando se hace /me:",req.session.userId);
+        console.log("Sesion cuando se hace /me:",req.session);
         // Verifica si la sesión está definida
         if (!req.session.userId) {
             return res.status(401).json({ msg: "Primero inicia sesión" });
