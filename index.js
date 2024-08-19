@@ -34,7 +34,8 @@ app.use(session({
 }));
 
 app.use(cors({
-    origin: 'https://frontendclinica.madresegura.co',
+    //origin: 'https://frontendclinica.madresegura.co',
+    origin: 'http://localhost:3000',
     credentials: true 
 }));
 
